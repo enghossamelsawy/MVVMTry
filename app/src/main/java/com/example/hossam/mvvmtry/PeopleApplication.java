@@ -6,13 +6,17 @@ import android.content.Context;
 import com.example.hossam.mvvmtry.data.PeopleApi;
 import com.example.hossam.mvvmtry.data.PeopleApiService;
 
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by hossam on 10/8/17.
  */
 
 public class PeopleApplication extends Application {
-    private  PeopleApiService peopleApiService;
+
     private PeopleApi peopleApi;
+    private Scheduler scheduler;
 
 
 
@@ -20,10 +24,12 @@ public class PeopleApplication extends Application {
 
     public  static  PeopleApplication get (Context context)
     {
-        return ((PeopleApplication) (context.getApplicationContext()));
+        return ((PeopleApplication) context.getApplicationContext());
     }
 
-
+    public static PeopleApplication create(Context context) {
+        return PeopleApplication.get(context);
+    }
 
     public   PeopleApi getPeopleService() {
         if (peopleApi == null) {
@@ -33,13 +39,13 @@ public class PeopleApplication extends Application {
 
     }
 
+    public Scheduler subscribeScheduler() {
+        if (scheduler == null) {
+            scheduler = Schedulers.io();
+        }
 
-    public static PeopleApplication create(Context context) {
-        return PeopleApplication.get(context);
+        return scheduler;
     }
-
-
-
 
 
 }
